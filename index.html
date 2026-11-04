@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Critical Thinking | التفكير الناقد</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --green:#00ff88;
+  --dark:#020805;
+  --white:#e6fff0;
+}
+
+* {box-sizing:border-box;margin:0;padding:0}
+
+body {
+  background:var(--dark);
+  color:white;
+  font-family:'Cairo',sans-serif;
+  overflow:hidden;
+}
+
+canvas {
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  opacity:.35;
+}
+
+header {
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:15px 6%;
+  display:flex;
+  justify-content:space-between;
+  background:#020805dd;
+  border-bottom:1px solid #00ff8844;
+  z-index:5;
+  backdrop-filter:blur(10px);
+}
+
+.logo {
+  color:var(--green);
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.status {color:#9bffc5;font-size:12px}
+
+.progress {
+  position:fixed;
+  top:58px;
+  right:0;
+  height:3px;
+  background:var(--green);
+  z-index:6;
+  transition:.4s;
+}
+
+main {
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:85px 8% 80px;
+}
+
+.slide {
+  display:none;
+  width:100%;
+  max-width:950px;
+  animation:show .65s ease;
+}
+
+.slide.active {display:block}
+
+@keyframes show {
+  from {opacity:0;transform:translateY(25px)}
+  to {opacity:1;transform:translateY(0)}
+}
+
+.tag {
+  display:inline-block;
+  color:var(--green);
+  border:1px solid #00ff8866;
+  padding:5px 16px;
+  border-radius:30px;
+  margin-bottom:18px;
+  font-size:12px;
+}
+
+h1 {
+  font-size:clamp(38px,7vw,75px);
+  line-height:1.5;
+  margin-bottom:15px;
+}
+
+h2 {
+  color:var(--green);
+  font-size:clamp(27px,5vw,43px);
+  margin-bottom:18px;
+}
+
+.green {
+  color:var(--green);
+  text-shadow:0 0 20px #00ff8866;
+}
+
+.desc {
+  font-size:17px;
+  line-height:2.1;
+  color:#c6d9ce;
+  max-width:780px;
+}
+
+.center {text-align:center}
+.center .desc {margin:auto}
+
+.cards {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-top:24px;
+}
+
+.card {
+  padding:18px;
+  background:linear-gradient(140deg,#0b261a,#06100b);
+  border:1px solid #00ff8840;
+  border-radius:15px;
+  transition:.3s;
+}
+
+.card:hover {
+  transform:translateY(-5px);
+  border-color:var(--green);
+  box-shadow:0 0 20px #00ff8830;
+}
+
+.icon {font-size:28px;margin-bottom:7px}
+
+.card h3 {
+  color:var(--green);
+  margin-bottom:7px;
+  font-size:18px;
+}
+
+.card p {
+  color:#c6d9ce;
+  line-height:1.9;
+  font-size:14px;
+}
+
+.example {
+  border-right:3px solid var(--green);
+  background:#00ff880d;
+  padding:16px 20px;
+  margin-top:20px;
+  line-height:2;
+  color:#d8f5e4;
+}
+
+.buttons {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  padding:13px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#020805ee;
+  border-top:1px solid #00ff8844;
+  z-index:5;
+}
+
+button {
+  background:transparent;
+  border:1px solid var(--green);
+  color:var(--green);
+  padding:9px 17px;
+  border-radius:8px;
+  font-family:inherit;
+  cursor:pointer;
+  transition:.3s;
+}
+
+button:hover {
+  background:var(--green);
+  color:black;
+}
+
+#counter {font-size:12px;color:#b2c9bb}
+
+.options {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+#feedback {
+  margin-top:17px;
+  color:var(--green);
+  font-weight:bold;
+}
+
+@media(max-width:600px) {
+  main {padding:85px 6% 85px}
+  .cards {grid-template-columns:1fr;gap:9px}
+  .card {padding:11px}
+  .card p {font-size:12px}
+  .desc {font-size:14px}
+  .buttons {padding:10px 3%;gap:5px}
+  button {padding:8px 10px;font-size:11px}
+  .status {font-size:10px}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+<div class="progress" id="progress"></div>
+
+<header>
+  <div class="logo">THINK / CRITICALLY</div>
+  <div class="status">● THINKING MODE ACTIVE</div>
+</header>
+
+<main>
+
+<!-- 1 المقدمة -->
+<section class="slide active center">
+  <span class="tag">WELCOME TO THINKING WORLD</span>
+  <h1>التفكير <span class="green">الناقد</span></h1>
+  <p class="desc">
+    كيف نستخدم عقولنا بوعي؟
+    وكيف نحلل ما نسمعه ونراه قبل أن نصدقه أو نتخذ قراراً؟
+  </p>
+  <br>
+  <button onclick="next()">ابدأ التجربة ←</button>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <span class="tag">01 / DEFINITION</span>
+  <h2>ما التفكير الناقد؟</h2>
+  <p class="desc">
+    هو القدرة على تحليل المعلومات وتقييمها بطريقة منطقية،
+    والتمييز بين الحقائق والآراء، للوصول إلى أحكام وقرارات
+    مبنية على الأدلة وليس على التسرع.
+  </p>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🔍</div>
+      <h3>التحليل</h3>
+      <p>فهم المعلومات وتفكيكها لمعرفة تفاصيلها.</p>
+    </div>
+    <div class="card">
+      <div class="icon">⚖️</div>
+      <h3>التقييم</h3>
+      <p>معرفة مدى صحة المعلومات وقوة الأدلة.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <span class="tag">02 / DAILY LIFE</span>
+  <h2>لماذا نحتاجه في حياتنا؟</h2>
+  <p class="desc">
+    لأننا نتعرض يومياً لكم هائل من المعلومات والآراء
+    والاختيارات، ونحتاج إلى التفكير قبل التصديق أو التصرف.
+  </p>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🧠</div>
+      <h3>وعي أكبر</h3>
+      <p>يساعدنا على فهم المواقف من أكثر من زاوية.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🎯</div>
+      <h3>قرارات أفضل</h3>
+      <p>يجعل قراراتنا مبنية على التفكير والأسباب.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔐</div>
+      <h3>تجنب التضليل</h3>
+      <p>يحمينا من تصديق الشائعات والمعلومات الخاطئة.</p>
+    </div>
+    <div class="card">
+      <div class="icon">💡</div>
+      <h3>حل المشكلات</h3>
+      <p>يساعدنا على ابتكار حلول مناسبة للمواقف المختلفة.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <span class="tag">03 / SOCIAL MEDIA</span>
+  <h2>في وسائل التواصل الاجتماعي</h2>
+  <p class="desc">
+    ليس كل ما نراه على الإنترنت صحيحاً،
+    لذلك يجب أن نفكر قبل مشاركة أي معلومة.
+  </p>
+  <div class="example">
+    <strong class="green">الموقف:</strong>
+    شاهدتِ خبراً منتشراً يقول إن هناك قراراً جديداً في المدارس.
+    <br>
+    هل تنشرينه مباشرة؟
+    أم تتحققين من مصدره أولاً؟
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>❌ التصرف المتسرع</h3>
+      <p>إعادة نشر الخبر دون معرفة مصدره.</p>
+    </div>
+    <div class="card">
+      <h3>✓ التفكير الناقد</h3>
+      <p>البحث عن الخبر في المصادر الرسمية والتأكد من تاريخه.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <span class="tag">04 / DECISION MAKING</span>
+  <h2>عند اتخاذ القرارات</h2>
+  <p class="desc">
+    التفكير الناقد يجعلنا نتوقف قليلاً قبل اتخاذ القرار،
+    ونقارن بين الخيارات ونتائج كل اختيار.
+  </p>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">1️⃣</div>
+      <h3>تحديد المشكلة</h3>
+      <p>ما القرار الذي أحتاج إلى اتخاذه؟</p>
+    </div>
+    <div class="card">
+      <div class="icon">2️⃣</div>
+      <h3>جمع المعلومات</h3>
+      <p>ما المعلومات التي أحتاج إليها؟</p>
+    </div>
+    <div class="card">
+      <div class="icon">3️⃣</div>
+      <h3>مقارنة الخيارات</h3>
+      <p>ما إيجابيات وسلبيات كل خيار؟</p>
+    </div>
+    <div class="card">
+      <div class="icon">4️⃣</div>
+      <h3>اختيار الأنسب</h3>
+      <p>أتخذ القرار بعد التفكير في النتائج.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <span class="tag">05 / STUDY & LIFE</span>
+  <h2>في الدراسة والحياة اليومية</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">📚</div>
+      <h3>في الدراسة</h3>
+      <p>عدم حفظ المعلومة فقط، بل فهمها وربطها بالأمثلة والأدلة.</p>
+    </div>
+    <div class="card">
+      <div class="icon">👥</div>
+      <h3>في العلاقات</h3>
+      <p>عدم الحكم على الآخرين من موقف واحد أو كلام منقول.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🛍️</div>
+      <h3>عند الشراء</h3>
+      <p>مقارنة الأسعار وقراءة التقييمات قبل شراء المنتج.</p>
+    </div>
+    <div class="card">
+      <div class="icon">⏰</div>
+      <h3>تنظيم الوقت</h3>
+      <p>تحديد الأولويات والتفكير في أفضل طريقة لإنجاز المهام.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 موقف تفاعلي -->
+<section class="slide">
+  <span class="tag">06 / REAL LIFE CHALLENGE</span>
+  <h2>ماذا ستفعلين؟</h2>
+  <p class="desc">
+    أرسلتلك صديقتك رسالة تحتوي على معلومة غريبة،
+    وطلبت منك نشرها بسرعة، لكنها لم تذكر أي مصدر.
+  </p>
+  <p class="desc" style="margin-top:15px;color:white">
+    ما التصرف الذي يدل على التفكير الناقد؟
+  </p>
+  <div class="options">
+    <button onclick="quiz(0)">أنشرها فوراً</button>
+    <button onclick="quiz(1)">أتحقق من صحتها</button>
+    <button onclick="quiz(0)">أصدقها لأنها من صديقتي</button>
+  </div>
+  <div id="feedback"></div>
+</section>
+
+<!-- 8 اختبار -->
+<section class="slide">
+  <span class="tag">07 / QUICK TEST</span>
+  <h2>اختبري طريقة تفكيرك</h2>
+  <p class="desc">هل التفكير الناقد يعني رفض جميع الآراء؟</p>
+  <div class="options">
+    <button onclick="test(false)">نعم</button>
+    <button onclick="test(true)">لا</button>
+  </div>
+  <div id="feedback2"></div>
+  <div class="example">
+    <span class="green">تذكري:</span>
+    التفكير الناقد لا يعني رفض كل شيء،
+    بل يعني فحص المعلومات والآراء قبل قبولها.
+  </div>
+</section>
+
+<!-- 9 الخاتمة -->
+<section class="slide center">
+  <span class="tag">END OF PRESENTATION</span>
+  <h1>فكّر قبل أن <span class="green">تُصدّق</span></h1>
+  <p class="desc">
+    اسأل، حلّل، تحقق، ثم قرر.
+    فالعقل الواعي لا يكتفي باستقبال المعلومات،
+    بل يفهمها ويقيّمها.
+  </p>
+  <br>
+  <h2>شكراً لحسن استماعكم</h2>
+  <button onclick="home()">إعادة العرض ↻</button>
+</section>
+
+</main>
+
+<div class="buttons">
+  <button onclick="prev()">السابق →</button>
+  <span id="counter">01 / 09</span>
+  <div style="display:flex;gap:6px">
+    <button onclick="autoPlay()" id="auto">▶ تلقائي</button>
+    <button onclick="soundToggle()" id="sound">♫ الصوت OFF</button>
+    <button onclick="next()">التالي ←</button>
+  </div>
+</div>
+
+<script>
+// MATRIX
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+let size=15,drops=[];
+
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+  drops=Array(Math.floor(canvas.width/size)).fill(1);
+}
+resize();
+window.addEventListener("resize",resize);
+
+const chars="01アイウエオカキクケコ";
+
+function matrix(){
+  ctx.fillStyle="rgba(2,8,5,.09)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#00ff88";
+  ctx.font=size+"px monospace";
+
+  drops.forEach((y,i)=>{
+    ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*size,y*size);
+    if(y*size>canvas.height && Math.random()>.975) drops[i]=0;
+    drops[i]++;
+  });
+}
+setInterval(matrix,55);
+
+// SLIDES
+const slides=document.querySelectorAll(".slide");
+let current=0;
+
+function show(n){
+  slides[current].classList.remove("active");
+  current=(n+slides.length)%slides.length;
+  slides[current].classList.add("active");
+
+  document.getElementById("counter").textContent=
+  String(current+1).padStart(2,"0")+" / 09";
+
+  document.getElementById("progress").style.width=
+  ((current+1)/slides.length*100)+"%";
+}
+
+function next(){show(current+1);tone(520)}
+function prev(){show(current-1);tone(350)}
+function home(){show(0)}
+
+// AUTO
+let running=false,timer;
+
+function autoPlay(){
+  running=!running;
+  document.getElementById("auto").textContent=
+  running?"⏸ إيقاف":"▶ تلقائي";
+  clearInterval(timer);
+
+  if(running){
+    timer=setInterval(()=>{
+      if(current===slides.length-1){
+        running=false;
+        clearInterval(timer);
+        document.getElementById("auto").textContent="▶ تلقائي";
+      }else show(current+1);
+    },10000);
+  }
+}
+
+// SOUND
+let soundOn=false,audio;
+
+function soundToggle(){
+  soundOn=!soundOn;
+  document.getElementById("sound").textContent=
+  soundOn?"♫ الصوت ON":"♫ الصوت OFF";
+  if(soundOn)tone(600);
+}
+
+function tone(freq){
+  if(!soundOn)return;
+  audio=audionew(window.AudioContextwindow.webkitAudioContext)();
+  const osc=audio.createOscillator();
+  const gain=audio.createGain();
+  osc.frequency.value=freq;
+  gain.gain.value=.035;
+  osc.connect(gain);
+  gain.connect(audio.destination);
+  osc.start();
+  osc.stop(audio.currentTime+.12);
+}
+
+// INTERACTIVE QUESTIONS
+function quiz(answer){
+  document.getElementById("feedback").textContent=
+  answer===1?
+  "✓ إجابة ممتازة! التحقق من المصدر خطوة أساسية في التفكير الناقد.":
+  "✕ فكري مرة أخرى: هل من الصحيح نشر معلومةدون دليل؟";
+  tone(answer===1?700:250);
+}
+
+function test(correct){
+  document.getElementById("feedback2").textContent=
+  correct?
+  "✓ أحسنتِ! التفكير الناقد يقيّم الآراء ولا يرفضها جميعاً.":
+  "✕ ليس تماماً! التفكير الناقد يعتمد على التحليل والتقييم.";
+  tone(correct?700:250);
+}
+
+// KEYBOARD
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft")next();
+  if(e.key==="ArrowRight")prev();
+});
+</script>
+
+</body>
+</html>
